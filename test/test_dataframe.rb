@@ -4,11 +4,11 @@ require 'fence/dataframe'
 class DataFrameTest < Minitest::Test
   def setup
     @sample_schema = [
-      {name: :string, type: :string, primary_key_index: 0},
-      {name: :int, type: :int, primary_key_index: 1},
-      {name: :float, type: :float, primary_key_index: nil},
-      {name: :bool, type: :bool},
-      {name: :time, type: :time}
+      Fence::Column.new(name: :c1, type: :string, primary_key_index: 0),
+      Fence::Column.new(name: :c2, type: :int, primary_key_index: 1),
+      Fence::Column.new(name: :c3, type: :float, primary_key_index: nil),
+      Fence::Column.new(name: :c4, type: :bool),
+      Fence::Column.new(name: :c5, type: :time)
     ]
 
     @sample_data = [
@@ -58,28 +58,28 @@ class DataFrameTest < Minitest::Test
   def test_unparsable_data_raise_exceptions
     assert_raises ArgumentError do
       Fence::DataFrame.new(
-        [{ name: :column, type: :int }],
+        [ Fence::Column.new(name: :column, type: :int)],
         [['hoge']]
       )
     end
 
     assert_raises ArgumentError do
       Fence::DataFrame.new(
-        [{ name: :column, type: :float }],
+        [ Fence::Column.new(name: :column, type: :float)],
         [['hoge']]
       )
     end
 
     assert_raises ArgumentError do
       Fence::DataFrame.new(
-        [{ name: :column, type: :bool }],
+        [Fence::Column.new(name: :column, type: :bool)],
         [['0']]
       )
     end
 
     assert_raises ArgumentError do
       Fence::DataFrame.new(
-        [{ name: :column, type: :time }],
+        [Fence::Column.new(name: :column, type: :time)],
         [['piyo']]
       )
     end

@@ -1,24 +1,22 @@
 require 'time'
 
 module Fence 
+  class Column
+    attr_reader :name, :type, :primary_key_index
+
+    def initialize(name:, type:, primary_key_index:nil)
+      @name = name.to_sym
+      @type = type.to_sym
+      @primary_key_index = primary_key_index
+    end
+  end
+
   class DataFrame
     attr_reader :rows
     attr_reader :columns
 
-    class Column
-      attr_reader :name, :type, :primary_key_index
-
-      def initialize(name, type, primary_key_index=nil)
-        @name = name
-        @type = type
-        @primary_key_index = primary_key_index
-      end
-    end
-
-    def initialize(schemas, data)
-      @columns = schemas.map do |column|
-        Column.new(column[:name], column[:type], column[:primary_key_index])
-      end
+    def initialize(columns, data)
+      @columns = columns
 
       @rows = data.map do |row|
         @columns.map.with_index do |column, index|

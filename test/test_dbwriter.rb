@@ -5,11 +5,11 @@ require 'tempfile'
 class DBWriterTest < Minitest::Test
   def setup
     @sample_schema = [
-      {name: :c1, type: :string, primary_key_index: 0},
-      {name: :c2, type: :int, primary_key_index: 1},
-      {name: :c3, type: :float, primary_key_index: nil},
-      {name: :c4, type: :bool},
-      {name: :c5, type: :time}
+      Fence::Column.new(name: :c1, type: :string, primary_key_index: 0),
+      Fence::Column.new(name: :c2, type: :int, primary_key_index: 1),
+      Fence::Column.new(name: :c3, type: :float, primary_key_index: nil),
+      Fence::Column.new(name: :c4, type: :bool),
+      Fence::Column.new(name: :c5, type: :time)
     ]
 
     @sample_data = [
