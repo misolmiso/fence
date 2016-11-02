@@ -11,5 +11,6 @@ RUN bundle install
 RUN mkdir /workdir
 WORKDIR /workdir
 
+ENTRYPOINT ["bundle", "exec"]
 CMD ["bash"]
 
