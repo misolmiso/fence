@@ -17,7 +17,7 @@ class DBWriterTest < Minitest::Test
       ['fuga', '1', '2.72', 'false', '2016-11-02T17:20:00+09:00']
     ]
 
-    @sample_frame = Fence::DataFrame.new(@sample_schema, @sample_data)
+    @sample_frame = Fence::DataFrame.new(:sample, @sample_schema, @sample_data)
 
     tempfile = Tempfile.create(['fence-test', '.db'])
     @tempfile_path = tempfile.path
@@ -32,13 +32,13 @@ class DBWriterTest < Minitest::Test
 
   def test_dbfile_is_written
     Fence::DBWriter.open(@tempfile_path) do |writer|
-      writer.write_data(:test, @sample_frame)
+      writer.write_data(@sample_frame)
     end
 
     assert File.exist?(@tempfile_path)
 
     Sequel.sqlite(@tempfile_path) do |db|
-      row = db[:test][c1: 'fuga', c2: 1]
+      row = db[:sample][c1: 'fuga', c2: 1]
 
       assert_in_epsilon 2.72, row[:c3]
       assert_equal Time.new(2016, 11, 2, 17, 20, 00, "+09:00"), row[:c5]
@@ -47,11 +47,11 @@ class DBWriterTest < Minitest::Test
 
   def test_primary_key_is_set
     Fence::DBWriter.open(@tempfile_path) do |writer|
-      writer.write_data(:test, @sample_frame)
+      writer.write_data(@sample_frame)
     end
 
     Sequel.sqlite(@tempfile_path) do |db|
-      schema = db.schema(:test)
+      schema = db.schema(:sample)
 
       name, column = schema.find {|row| row.first == :c1}
       assert column[:primary_key]

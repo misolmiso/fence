@@ -18,12 +18,13 @@ module Fence
       @db = Sequel.sqlite(dbfile_name)
     end
 
-    def write_data(title, data)
+
+    def write_data(data)
       schemas = data.columns.map do |schema|
         {name:schema.name, type:convert_sequel_type(schema.type)}
       end
 
-      @db.create_table(title) do
+      @db.create_table(data.title) do
         schemas.each do |schema|
           column schema[:name], schema[:type]
         end
@@ -37,7 +38,7 @@ module Fence
         primary_key pks
       end
 
-      @db[title].import(data.columns.map(&:name), data.rows)
+      @db[data.title].import(data.columns.map(&:name), data.rows)
     end
 
     def close

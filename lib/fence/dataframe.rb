@@ -12,10 +12,10 @@ module Fence
   end
 
   class DataFrame
-    attr_reader :rows
-    attr_reader :columns
+    attr_reader :title, :rows, :columns
 
-    def initialize(columns, data)
+    def initialize(title, columns, data)
+      @title = title
       @columns = columns
 
       @rows = data.map do |row|

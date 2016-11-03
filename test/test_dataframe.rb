@@ -18,7 +18,7 @@ class DataFrameTest < Minitest::Test
   end
 
   def test_that_dataframe_is_created
-    frame = Fence::DataFrame.new(@sample_schema, @sample_data)
+    frame = Fence::DataFrame.new(:sample, @sample_schema, @sample_data)
 
     assert_equal 5, frame.columns.length
 
@@ -29,7 +29,7 @@ class DataFrameTest < Minitest::Test
   end
 
   def test_that_data_is_casted
-    frame = Fence::DataFrame.new(@sample_schema, @sample_data)
+    frame = Fence::DataFrame.new(:sample, @sample_schema, @sample_data)
     row = frame.rows.first
 
     assert_equal 'hoge', row[0]
@@ -44,7 +44,7 @@ class DataFrameTest < Minitest::Test
   def test_tath_empty_data_is_converted_to_nil
     nil_data = [['', '', '', '', '']]
 
-    frame = Fence::DataFrame.new(@sample_schema, nil_data)
+    frame = Fence::DataFrame.new(:sample, @sample_schema, nil_data)
 
     row = frame.rows.first
 
@@ -58,6 +58,7 @@ class DataFrameTest < Minitest::Test
   def test_unparsable_data_raise_exceptions
     assert_raises ArgumentError do
       Fence::DataFrame.new(
+        :sample,
         [ Fence::Column.new(name: :column, type: :int)],
         [['hoge']]
       )
@@ -65,6 +66,7 @@ class DataFrameTest < Minitest::Test
 
     assert_raises ArgumentError do
       Fence::DataFrame.new(
+        :sample,
         [ Fence::Column.new(name: :column, type: :float)],
         [['hoge']]
       )
@@ -72,6 +74,7 @@ class DataFrameTest < Minitest::Test
 
     assert_raises ArgumentError do
       Fence::DataFrame.new(
+        :sample,
         [Fence::Column.new(name: :column, type: :bool)],
         [['0']]
       )
@@ -79,6 +82,7 @@ class DataFrameTest < Minitest::Test
 
     assert_raises ArgumentError do
       Fence::DataFrame.new(
+        :sample,
         [Fence::Column.new(name: :column, type: :time)],
         [['piyo']]
       )
