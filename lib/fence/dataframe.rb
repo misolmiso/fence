@@ -34,9 +34,9 @@ module Fence
       when :int then Integer(str)
       when :float then Float(str)
       when :bool
-      if str == 'true' then
+      if str.casecmp('true') == 0 then
         true
-      elsif str == 'false' then
+      elsif str.casecmp('false') == 0 then
         false
       else
         raise ArgumentError.new('Boolean parse error')
