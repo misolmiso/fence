@@ -1,0 +1,41 @@
+#!/usr/bin/env ruby
+
+require 'pathname'
+
+$:.unshift(Pathname(__FILE__).dirname.parent.join('lib').expand_path.to_path)
+
+require 'fence'
+
+output_db_filename = 'out.db'
+comment_signature = '#'
+
+OptionParser.new do |option|
+  option.on('-o', '--output FILE', String, '出力するdbファイル名を指定する(デフォルトはout.db)') do |file|
+    output_db_filename = file
+  end
+
+  option.on('--coment SIGNATURE', String, 'コメントアウトされている行の行頭シンボルを指定する(デフォルトは#)') do |sig|
+    comment_signature = sig
+  end
+ 
+  option.parse!(ARGV)
+end
+
+spreadsheet_keys = ARGV
+session = GoogleDrive::Session.from_config("config.json")
+
+worksheets = spreadsheet_keys.flat_map do |spreadsheet_key|
+  spreadsheet = session.spreadsheet_by_key(spreadsheet_key)
+  Fence::Spreadsheet.parse(spreadsheet, comment_signature)
+end
+
+dataframes = worksheets.map do |worksheet|
+  Fence::DataFrame.new(worksheet.title, worksheet.columns, worksheet.rows)
+end
+
+Fence::DBWriter.open(output_db_filename) do |writer|
+  dataframes.each do |dataframe|
+    writer.write_data(dataframe)
+  end
+end
+
