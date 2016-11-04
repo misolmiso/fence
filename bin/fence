@@ -7,14 +7,19 @@ $:.unshift(Pathname(__FILE__).dirname.parent.join('lib').expand_path.to_path)
 require 'fence'
 
 output_db_filename = 'out.db'
+config_filename = 'config.json'
 comment_signature = '#'
 
 OptionParser.new do |option|
-  option.on('-o', '--output FILE', String, '出力するdbファイル名を指定する(デフォルトはout.db)') do |file|
+  option.on('-o', '--output=FILE', String, '出力するdbファイル名を指定する(デフォルトはout.db)') do |file|
     output_db_filename = file
   end
 
-  option.on('--coment SIGNATURE', String, 'コメントアウトされている行の行頭シンボルを指定する(デフォルトは#)') do |sig|
+  option.on('-c', '--config=FILE', String, '読み書きするコンフィグファイルを指定する(デフォルトはconfig.json)') do |file|
+    config_filename = file
+  end
+
+  option.on('--coment=SIGNATURE', String, 'コメントアウトされている行の行頭シンボルを指定する(デフォルトは#)') do |sig|
     comment_signature = sig
   end
  
