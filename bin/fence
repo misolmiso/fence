@@ -11,6 +11,8 @@ config_filename = 'config.json'
 comment_signature = '#'
 
 OptionParser.new do |option|
+  option.banner = "Usage: fence [options] [spreadsheet_key(s) ...]"
+
   option.on('-o', '--output=FILE', String, '出力するdbファイル名を指定する(デフォルトはout.db)') do |file|
     output_db_filename = file
   end
@@ -27,6 +29,7 @@ OptionParser.new do |option|
 end
 
 spreadsheet_keys = ARGV
+
 session = GoogleDrive::Session.from_config("config.json")
 
 worksheets = spreadsheet_keys.flat_map do |spreadsheet_key|
