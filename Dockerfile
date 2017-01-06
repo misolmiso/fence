@@ -11,6 +11,4 @@ RUN bundle install
 RUN mkdir /workdir
 WORKDIR /workdir
 
-ENTRYPOINT ["bundle", "exec"]
-CMD ["bash"]
-
+ENTRYPOINT ["bundle", "exec", "bin/fence"]
