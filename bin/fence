@@ -19,7 +19,7 @@ OptionParser.new do |option|
     config_filename = file
   end
 
-  option.on('--coment=SIGNATURE', String, 'コメントアウトされている行の行頭シンボルを指定する(デフォルトは#)') do |sig|
+  option.on('--comment=SIGNATURE', String, 'コメントアウトされている行の行頭シンボルを指定する(デフォルトは#)') do |sig|
     comment_signature = sig
   end
  
